@@ -1,61 +1,41 @@
-import arcade
+import pygame
 import random
 import numpy as np
-import PIL
+import time
 
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Lizard"
 LIZARD_SPEED = 10
 
-colors = [
-    (0,   255,   0),
-    (255, 0,   0),
-    (0,   255, 255),
-    (0,   0,   255)
+red = pygame.Color(255,0,0)
+green = pygame.Color(0,255,0)
+blue = pygame.Color(0,0,255)
+
+#Fruit color list
+fruits = [
+    red,
+    green,
+    blue
 ]
 
-def create_textures():
-    """ Create a list of images for sprites based on the global colors. """
-    new_textures = []
-    for color in colors:
-        image = PIL.Image.new('RGB', (WIDTH, HEIGHT), color)
-        new_textures.append(arcade.Texture(str(color), image=image))
-    return new_textures
+#Starting position
+start = [100,50]
 
-texture_list = create_textures()
+#Lizard Body
+lizard = [
+    [100, 50],
+    [90,  50],
+    [80, 50],
+    [70, 50]
+         ]
 
-class Lizard(arcade.Window):
-    def __init__(self, width, height, title):
-        super().__init__(width, height, title)
-        arcade.set_background_color(arcade.color.WHITE)
+pygame.init() #Initializes game
 
-        self.board = None
-        self.frame_count = 0
-        self.game_over = False
-        self.paused = False
-        self.board_sprite_list = None
-    def setup(self):
-        self.board = new_board()
+#Game Window
+pygame.display.set_caption('Lizard')
+game_window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-        self.board_sprite_list = arcade.SpriteList()
-        for row in range(len(self.board)):
-            for column in range(len(self.board[0])):
-                sprite = arcade.Sprite()
-                for texture in texture_list:
-                    sprite.append_texture(texture)
-                sprite.set_texture(0)
-                sprite.center_x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
-                sprite.center_y = SCREEN_HEIGHT - (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
-
-                self.board_sprite_list.append(sprite)
-
-        self.new_stone()
-        self.update_board()
-    
-def main():
-    LizardGame = Lizard(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    LizardGame.setup()
-    arcade.run()
-if __name__ == "__main__":
-    main()
+#FPS
+clock = pygame.time.Clock()
+clock.tick(30)

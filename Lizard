@@ -7,6 +7,7 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Lizard"
 LIZARD_SPEED = 10
+SCORE = 0
 
 red = pygame.Color(255,0,0)
 green = pygame.Color(0,255,0)
@@ -32,6 +33,8 @@ lizard = [
 fruit_position = [random.int(1, (SCREEN_WIDTH//10)) * 10,
                   random.int(1, (SCREEN_HEIGHT//10)) * 10]
 fruit_spawn = True
+
+screen.draw.text('Score: ' + str(score), (15,10), color=(255,255,255), fontsize=30)
 
 pygame.init() #Initializes game
 

@@ -38,6 +38,14 @@ screen.draw.text('Score: ' + str(SCORE), (15,10), color=(255,255,255), fontsize=
 
 pygame.init() #Initializes game
 
+def gameOver(): #Displays final score when game is over
+    gameFont = pygame.font.SysFont("Arial", 36)
+    gameText = font.render("Game Over... Your Score = " + str(score), True)
+    textRec = gameText.get_rect()
+    game_window.blit(gameText, textRec)
+    time.sleep(2)
+    quit()
+
 #Game Window
 pygame.display.set_caption('Lizard')
 game_window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))

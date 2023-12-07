@@ -53,3 +53,58 @@ game_window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 #FPS
 clock = pygame.time.Clock()
 clock.tick(30)
+
+while true:
+    #Gets keystrokes
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                Lizard_Position[y] += LIZARD_SPEED
+            if event.key == pygame.K_DOWN:
+                Lizard_Position[y] -= LIZARD_SPEED
+            if event.key == pygame.K_RIGHT:
+                Lizard_Position[x] += LIZARD_SPEED
+            if event.key == pygame.K_LEFT:
+                Lizard_Position[x] -= LIZARD_SPEED
+                
+                
+    #Don't want lizard moving in multiple directions at once
+    if change_to == 'UP' and direction != 'DOWN':
+        direction = 'UP'
+    if change_to == 'DOWN' and direction != 'UP':
+        direction = 'DOWN'
+    if change_to == 'LEFT' and direction != 'RIGHT':
+        direction = 'LEFT'
+    if change_to == 'RIGHT' and direction != 'LEFT':
+        direction = 'RIGHT'
+        
+    #Increasing the snake body size
+    lizard.insert(0, list(Lizard_Position))
+    if Lizard_Position[x] and Lizard_Position[y] == fruit_position[0] and fruit_position[1]:
+        score +=1
+        fruit_spawn = false
+    else:
+        lizard.pop() #Important, this pop function makes it so the snake doesn't grow every time you move!
+        
+    if fruit_spawn == false:
+        fruit_position = [random.int(1, (SCREEN_WIDTH//10)) * 10, 
+                          random.int(1, (SCREEN_HEIGHT//10)) * 10]
+        fruit_spawn = True
+        game_window.fill(black)
+    
+    for pos in lizard: #this simply gets the lizard whole list, so we can create the lizard based on how long it is
+        pygame.draw.rect(game_window, green, 
+                         pygame.Rect(pos[0], pos[1], LIZARD_SPEED, LIZARD_SPEED)) #We are creating the lizard from pos from above
+    pygame.draw.rect(game_window, random.choice(fruits), 
+                     pygame.Rect(fruit_position[0], fruit_position[1], LIZARD_SPEED, LIZARD_SPEED))
+    
+    #Game over conditions that call previous game over function
+    if lizard_position[x] < 0 or lizard_position[x] > SCREEN_WIDTH-LIZARD_SPEED:
+        game_over()
+    if lizard_position[y] < 0 or lizard_position[y] > SCREEN_HEIGHT-LIZARD_SPEED:
+        game_over()
+    for block in lizard[1:]: #Same as before, checks for each block of current snake length
+        if lizard_position[x] == block[0] or lizard_position[y] == block[1]:
+            game_over()
+            
+    pygame.display.update()

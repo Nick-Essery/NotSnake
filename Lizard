@@ -7,6 +7,55 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Lizard"
 LIZARD_SPEED = 10
+
+red = pygame.Color(255,0,0)
+green = pygame.Color(0,255,0)
+blue = pygame.Color(0,0,255)
+
+#Fruit color list
+fruits = [
+    red,
+    green,
+    blue
+]
+
+#Starting position
+x = 100
+y = 50
+Lizard_Position = [x, y]
+
+#Lizard Body
+lizard = [
+    [100, 50],
+    [90,  50],
+    [80, 50],
+    [70, 50]
+         ]
+fruit_position = [random.int(1, (SCREEN_WIDTH//10)) * 10,
+                  random.int(1, (SCREEN_HEIGHT//10)) * 10]
+fruit_spawn = True
+
+pygame.init() #Initializes game
+
+#Game Window
+pygame.display.set_caption('Lizard')
+game_window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+#FPS
+clock = pygame.time.Clock()
+clock.tick(30)
+
+
+#Main game function
+import pygame
+import random
+import numpy as np
+import time
+
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
+SCREEN_TITLE = "Lizard"
+LIZARD_SPEED = 10
 SCORE = 0
 
 red = pygame.Color(255,0,0)
@@ -30,8 +79,8 @@ lizard = [
     [80, 50],
     [70, 50]
          ]
-fruit_position = [random.int(1, (SCREEN_WIDTH//10)) * 10,
-                  random.int(1, (SCREEN_HEIGHT//10)) * 10]
+fruit_position = [random.randrange(1, (SCREEN_WIDTH//10)) * 10,
+                  random.randrange(1, (SCREEN_HEIGHT//10)) * 10]
 fruit_spawn = True
 
 screen.draw.text('Score: ' + str(SCORE), (15,10), color=(255,255,255), fontsize=30)
@@ -87,8 +136,8 @@ while true:
         lizard.pop() #Important, this pop function makes it so the snake doesn't grow every time you move!
         
     if fruit_spawn == false:
-        fruit_position = [random.int(1, (SCREEN_WIDTH//10)) * 10, 
-                          random.int(1, (SCREEN_HEIGHT//10)) * 10]
+        fruit_position = [random.randrange(1, (SCREEN_WIDTH//10)) * 10, 
+                          random.randrange(1, (SCREEN_HEIGHT//10)) * 10]
         fruit_spawn = True
         game_window.fill(black)
     
@@ -100,11 +149,11 @@ while true:
     
     #Game over conditions that call previous game over function
     if lizard_position[x] < 0 or lizard_position[x] > SCREEN_WIDTH-LIZARD_SPEED:
-        game_over()
+        gameOver()
     if lizard_position[y] < 0 or lizard_position[y] > SCREEN_HEIGHT-LIZARD_SPEED:
-        game_over()
+        gameOver()
     for block in lizard[1:]: #Same as before, checks for each block of current snake length
         if lizard_position[x] == block[0] or lizard_position[y] == block[1]:
-            game_over()
+            gameOver()
             
     pygame.display.update()

@@ -12,9 +12,11 @@ SCORE = 0
 direction = 'RIGHT'
 change_to = direction
 
+black = pygame.Color(0,0,0)
 red = pygame.Color(255,0,0)
 green = pygame.Color(0,255,0)
 blue = pygame.Color(0,0,255)
+white = pygame.Color(255,255,255)
 
 #Fruit color list
 fruits = [
@@ -27,12 +29,15 @@ fruits = [
 Lizard_Position = [100, 50]
 
 #Lizard Body
-lizard = [
-    [100, 50],
-    [90,  50],
-    [80, 50],
-    [70, 50]
+lizard = [[100, 50],
+          [90,  50],
+          [80, 50],
+          [70, 50]
          ]
+
+#Game Window
+pygame.display.set_caption('Lizard')
+game_window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 fruit_position = [random.randrange(1, (SCREEN_WIDTH//10)) * 10,
@@ -44,23 +49,18 @@ pygame.init() #Initializes game
 
 def displayScore(): #Displays score in game
     gameFont = pygame.font.SysFont("Arial", 36)
-    gameText = font.render("Your Score = " + str(SCORE), True, red)
+    gameText = gameFont.render("Your Score = " + str(SCORE), True, red)
     textRec = gameText.get_rect()
     game_window.blit(gameText, textRec)
-    time.sleep(2)
     quit()
 
 def gameOver(): #Displays final score when game is over
     gameFont = pygame.font.SysFont("Arial", 36)
-    gameText = gameFont.render("Game Over... Your Score = " + str(SCORE), True, red)
-    textRec = gameText.get_rect()
-    game_window.blit(gameText, textRec)
-    time.sleep(2)
-    quit()
+    gameText = gameFont.render("Game Over... You Stink", True, red)
+    gameTextBox = gameText.get_rect()
+    gameTextBox.midtop = (SCREEN_WIDTH/2, SCREEN_HEIGHT/4)
+    game_window.blit(gameText, gameTextBox)
 
-#Game Window
-pygame.display.set_caption('Lizard')
-game_window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #FPS
 clock = pygame.time.Clock()
@@ -91,9 +91,9 @@ while True:
         direction = 'RIGHT'
         
     if direction == 'UP':
-        Lizard_Position[1] += LIZARD_SPEED
-    if direction == 'DOWN':
         Lizard_Position[1] -= LIZARD_SPEED
+    if direction == 'DOWN':
+        Lizard_Position[1] += LIZARD_SPEED
     if direction == 'LEFT':
         Lizard_Position[0] -= LIZARD_SPEED
     if direction == 'RIGHT':
@@ -106,8 +106,9 @@ while True:
         fruit_spawn = False
     else:
         lizard.pop() #Important, this pop function makes it so the snake doesn't grow every time you move!
+        game_window.fill(black)
         
-    if fruit_spawn == False:
+    if not fruit_spawn:
         fruit_position = [random.randrange(1, (SCREEN_WIDTH//10)) * 10, 
                           random.randrange(1, (SCREEN_HEIGHT//10)) * 10]
         fruit_spawn = True
@@ -115,19 +116,21 @@ while True:
     
     for pos in lizard: #this simply gets the lizard whole list, so we can create the lizard based on how long it is
         pygame.draw.rect(game_window, green, 
-                         pygame.Rect(pos[0], pos[1], LIZARD_SPEED, LIZARD_SPEED)) #We are creating the lizard from pos from above
+                         pygame.Rect(pos[0], pos[1], 10, 10)) #We are creating the lizard from pos from above
     pygame.draw.rect(game_window, random.choice(fruits), 
-                     pygame.Rect(fruit_position[0], fruit_position[1], LIZARD_SPEED, LIZARD_SPEED))
+                     pygame.Rect(fruit_position[0], fruit_position[1], 10, 10))
     
     #Game over conditions that call previous game over function
-    if Lizard_Position[0] < 0 or Lizard_Position[0] > SCREEN_WIDTH-LIZARD_SPEED:
+    if Lizard_Position[0] < 0 or Lizard_Position[0] > SCREEN_WIDTH-10:
         gameOver()
-    if Lizard_Position[1] < 0 or Lizard_Position[1] > SCREEN_HEIGHT-LIZARD_SPEED:
+    if Lizard_Position[1] < 0 or Lizard_Position[1] > SCREEN_HEIGHT-10:
         gameOver()
     #for block in lizard[1:]: #Same as before, checks for each block of current snake length
         #if Lizard_Position[0] == block[0] and Lizard_Position[1] == block[1]:
             #gameOver()
-            
+    
+    displayScore()
+    
     pygame.display.update()
     
     clock.tick(LIZARD_SPEED)

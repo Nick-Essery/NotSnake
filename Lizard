@@ -9,6 +9,8 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Lizard"
 LIZARD_SPEED = 10
 SCORE = 0
+direction = 'RIGHT'
+change_to = direction
 
 red = pygame.Color(255,0,0)
 green = pygame.Color(0,255,0)
@@ -22,7 +24,7 @@ fruits = [
 ]
 
 #Starting position
-start = [100,50]
+Lizard_Position = [100, 50]
 
 #Lizard Body
 lizard = [
@@ -31,6 +33,8 @@ lizard = [
     [80, 50],
     [70, 50]
          ]
+
+
 fruit_position = [random.randrange(1, (SCREEN_WIDTH//10)) * 10,
                   random.randrange(1, (SCREEN_HEIGHT//10)) * 10]
 fruit_spawn = True
@@ -40,7 +44,7 @@ pygame.init() #Initializes game
 
 def displayScore(): #Displays score in game
     gameFont = pygame.font.SysFont("Arial", 36)
-    gameText = font.render("Your Score = " + str(score), True)
+    gameText = font.render("Your Score = " + str(SCORE), True, red)
     textRec = gameText.get_rect()
     game_window.blit(gameText, textRec)
     time.sleep(2)
@@ -48,7 +52,7 @@ def displayScore(): #Displays score in game
 
 def gameOver(): #Displays final score when game is over
     gameFont = pygame.font.SysFont("Arial", 36)
-    gameText = font.render("Game Over... Your Score = " + str(score), True)
+    gameText = gameFont.render("Game Over... Your Score = " + str(SCORE), True, red)
     textRec = gameText.get_rect()
     game_window.blit(gameText, textRec)
     time.sleep(2)
@@ -62,18 +66,18 @@ game_window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 clock.tick(30)
 
-while true:
+while True:
     #Gets keystrokes
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                Lizard_Position[y] += LIZARD_SPEED
+                Lizard_Position[1] += LIZARD_SPEED
             if event.key == pygame.K_DOWN:
-                Lizard_Position[y] -= LIZARD_SPEED
+                Lizard_Position[1] -= LIZARD_SPEED
             if event.key == pygame.K_RIGHT:
-                Lizard_Position[x] += LIZARD_SPEED
+                Lizard_Position[0] += LIZARD_SPEED
             if event.key == pygame.K_LEFT:
-                Lizard_Position[x] -= LIZARD_SPEED
+                Lizard_Position[0] -= LIZARD_SPEED
                 
                 
     #Don't want lizard moving in multiple directions at once
@@ -88,13 +92,13 @@ while true:
         
     #Increasing the snake body size
     lizard.insert(0, list(Lizard_Position))
-    if Lizard_Position[x] and Lizard_Position[y] == fruit_position[0] and fruit_position[1]:
-        score +=1
-        fruit_spawn = false
+    if Lizard_Position[0] and Lizard_Position[1] == fruit_position[0] and fruit_position[1]:
+        SCORE +=1
+        fruit_spawn = False
     else:
         lizard.pop() #Important, this pop function makes it so the snake doesn't grow every time you move!
         
-    if fruit_spawn == false:
+    if fruit_spawn == False:
         fruit_position = [random.randrange(1, (SCREEN_WIDTH//10)) * 10, 
                           random.randrange(1, (SCREEN_HEIGHT//10)) * 10]
         fruit_spawn = True
@@ -107,12 +111,12 @@ while true:
                      pygame.Rect(fruit_position[0], fruit_position[1], LIZARD_SPEED, LIZARD_SPEED))
     
     #Game over conditions that call previous game over function
-    if lizard_position[x] < 0 or lizard_position[x] > SCREEN_WIDTH-LIZARD_SPEED:
+    if Lizard_Position[0] < 0 or Lizard_Position[0] > SCREEN_WIDTH-LIZARD_SPEED:
         gameOver()
-    if lizard_position[y] < 0 or lizard_position[y] > SCREEN_HEIGHT-LIZARD_SPEED:
+    if Lizard_Position[1] < 0 or Lizard_Position[1] > SCREEN_HEIGHT-LIZARD_SPEED:
         gameOver()
     for block in lizard[1:]: #Same as before, checks for each block of current snake length
-        if lizard_position[x] == block[0] or lizard_position[y] == block[1]:
+        if Lizard_Position[0] == block[0] or Lizard_Position[1] == block[1]:
             gameOver()
             
     pygame.display.update()
